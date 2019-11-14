@@ -19,7 +19,7 @@ export const get = async (key: string) => {
     if (value !== null) {
       return JSON.parse(value);
     }
-    throw new Error('Key Not Found');
+    return null;
   } catch (error) {
     console.error(error);
     return Promise.reject(new Error('Error getting data'));
