@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import { merge } from 'lodash';
 import { GITHUB_API, GITHUB_KEY } from 'react-native-dotenv';
 
@@ -17,7 +17,39 @@ const github = axios.create({
   },
 });
 
-const handleError = (e: Error): ErrorServiceResponse => {
+const handleInternalError = (e: Error): ErrorServiceResponse => {
+  console.error(e);
+  return {
+    success: false,
+    error: e,
+  };
+};
+
+const handleHttpError = (e: AxiosError<{ message: string }>): ErrorServiceResponse => {
+  if (e.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.log(e.response);
+    console.log(e.response.data);
+    console.log(e.response.status);
+    console.log(e.response.headers);
+    return {
+      success: false,
+      error: new Error(e.response.data.message),
+    };
+  }
+  if (e.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.log(e.request);
+    e.message = 'Internal Error'; // eslint-disable-line
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log('Error', e.message);
+  }
+
+  console.log(e.config);
   console.error(e);
   return {
     success: false,
@@ -39,7 +71,7 @@ export const createUser = async (user: User): Promise<ServiceResponse> => {
       },
     };
   } catch (e) {
-    return handleError(e);
+    return handleInternalError(e);
   }
 };
 
@@ -57,7 +89,7 @@ export const getUser = async (id: string): Promise<ServiceResponse> => {
       },
     };
   } catch (e) {
-    return handleError(e);
+    return handleInternalError(e);
   }
 };
 
@@ -78,7 +110,7 @@ export const getUserRepos = async (
       },
     };
   } catch (err) {
-    return handleError(err);
+    return handleHttpError(err);
   }
 };
 
@@ -94,6 +126,18 @@ export const getAllUsers = async (): Promise<ServiceResponse> => {
       },
     };
   } catch (err) {
-    return handleError(err);
+    return handleInternalError(err);
+  }
+};
+
+export const checkUsername = async (
+  username: string,
+  config?: AxiosRequestConfig,
+): Promise<ServiceResponse> => {
+  try {
+    await github.get(`/users/${username}`, config);
+    return { success: true, data: { exists: true } };
+  } catch (err) {
+    return handleHttpError(err);
   }
 };

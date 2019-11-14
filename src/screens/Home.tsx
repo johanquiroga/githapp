@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 import {
+  Layout,
+  Text,
   Button,
   withStyles,
   ThemedComponentProps,
@@ -44,6 +46,12 @@ function Home({ navigation, themedStyle }: HomeProps) {
     />
   );
 
+  const renderEmpty = () => (
+    <Layout style={themedStyle.emptyContainer}>
+      <Text style={themedStyle.centerText}>You don't have created any users yet.</Text>
+    </Layout>
+  );
+
   const renderFooter = () => (
     <Button onPress={() => navigation.navigate('CreateUser')}>Add User</Button>
   );
@@ -55,6 +63,7 @@ function Home({ navigation, themedStyle }: HomeProps) {
         keyExtractor={item => item.id}
         renderItem={renderItem}
         contentContainerStyle={themedStyle.listContainer}
+        ListEmptyComponent={renderEmpty}
         ListFooterComponent={renderFooter}
         ListFooterComponentStyle={themedStyle.listFooter}
       />
@@ -63,10 +72,14 @@ function Home({ navigation, themedStyle }: HomeProps) {
 }
 
 export default withStyles(Home, () => ({
+  centerText: {
+    textAlign: 'center',
+  },
   screen: {
     flex: 1,
   },
   listContainer: {
+    flex: 1,
     padding: 15,
   },
   item: {
@@ -77,5 +90,10 @@ export default withStyles(Home, () => ({
   },
   listFooter: {
     paddingTop: 20,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));

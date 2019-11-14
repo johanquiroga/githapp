@@ -1,5 +1,12 @@
 import React from 'react';
-import { List, Spinner, Layout, withStyles, ThemedComponentProps } from 'react-native-ui-kitten';
+import {
+  List,
+  Text,
+  Spinner,
+  Layout,
+  withStyles,
+  ThemedComponentProps,
+} from 'react-native-ui-kitten';
 
 import RepoListItem from './RepoListItem';
 
@@ -32,6 +39,12 @@ const RepoList = ({
     />
   );
 
+  const renderEmpty = () => (
+    <Layout style={themedStyle.emptyContainer}>
+      <Text style={themedStyle.centerText}>You don't have created any users yet.</Text>
+    </Layout>
+  );
+
   const renderFooter = () => {
     if (!loadingMore) {
       return null;
@@ -54,6 +67,7 @@ const RepoList = ({
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.5}
       initialNumToRender={5}
+      ListEmptyComponent={renderEmpty}
       ListFooterComponent={renderFooter}
     />
   );
@@ -61,6 +75,14 @@ const RepoList = ({
 
 export default withStyles(RepoList, () => ({
   listFooter: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centerText: {
+    textAlign: 'center',
+  },
+  emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
