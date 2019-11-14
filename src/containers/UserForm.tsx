@@ -4,7 +4,7 @@ import { withNavigation } from 'react-navigation';
 import { NavigationStackScreenProps } from 'react-navigation-stack';
 
 // Constants
-import { forms, UserFormValues } from '../constants';
+import { userForm, UserFormValues } from '../lib/forms';
 
 // Services
 import * as GithappService from '../services';
@@ -18,14 +18,14 @@ export default compose(
   withNavigation,
   withFormik<UserFormProps, UserFormValues>({
     mapPropsToValues: () => ({
-      id: forms.user.initialValues.id,
-      username: forms.user.initialValues.username,
-      name: forms.user.initialValues.name,
-      email: forms.user.initialValues.email,
-      birthdate: forms.user.initialValues.birthdate,
+      id: userForm.initialValues.id,
+      username: userForm.initialValues.username,
+      name: userForm.initialValues.name,
+      email: userForm.initialValues.email,
+      birthdate: userForm.initialValues.birthdate,
     }),
     validateOnMount: true,
-    validationSchema: forms.user.schema,
+    validationSchema: userForm.schema,
     handleSubmit: async (values, { setSubmitting, setFieldError, props }) => {
       const result = await GithappService.createUser(values);
       setSubmitting(false);

@@ -14,7 +14,7 @@ import fecha from 'fecha';
 import { InputComponent } from 'react-native-ui-kitten/ui/input/input.component';
 
 // Constants
-import { forms, UserFormValues } from '../constants';
+import { userForm, UserFormValues } from '../lib/forms';
 
 // Helpers
 import * as helpers from '../helpers';
@@ -68,8 +68,8 @@ function UserForm({
           value={values.id}
           onBlur={handleBlur('id')}
           onChangeText={handleChange('id')}
-          label={forms.user.labels.id}
-          placeholder={forms.user.placeholders.id}
+          label={userForm.labels.id}
+          placeholder={userForm.placeholders.id}
           caption={touched.id && errors.id ? errors.id : ''}
           autoCapitalize="none"
           keyboardType="number-pad"
@@ -89,8 +89,8 @@ function UserForm({
           value={values.username}
           onBlur={handleBlur('username')}
           onChangeText={handleChange('username')}
-          label={forms.user.labels.username}
-          placeholder={forms.user.placeholders.username}
+          label={userForm.labels.username}
+          placeholder={userForm.placeholders.username}
           caption={touched.username && errors.username ? errors.username : ''}
           autoCapitalize="none"
           onSubmitEditing={() => {
@@ -109,8 +109,8 @@ function UserForm({
           value={values.name}
           onBlur={handleBlur('name')}
           onChangeText={handleChange('name')}
-          label={forms.user.labels.name}
-          placeholder={forms.user.placeholders.name}
+          label={userForm.labels.name}
+          placeholder={userForm.placeholders.name}
           caption={touched.name && errors.name ? errors.name : ''}
           autoCapitalize="words"
           onSubmitEditing={() => {
@@ -129,8 +129,8 @@ function UserForm({
           value={values.email}
           onBlur={handleBlur('email')}
           onChangeText={handleChange('email')}
-          label={forms.user.labels.email}
-          placeholder={forms.user.placeholders.email}
+          label={userForm.labels.email}
+          placeholder={userForm.placeholders.email}
           caption={touched.email && errors.email ? errors.email : ''}
           autoCapitalize="none"
           keyboardType="email-address"
@@ -141,7 +141,7 @@ function UserForm({
 
       <Layout style={themedStyle.input}>
         <Text appearance="hint" style={themedStyle.birthdatePickerLabel}>
-          {forms.user.labels.birthdate}
+          {userForm.labels.birthdate}
         </Text>
         <TouchableOpacity
           activeOpacity={1.0}
