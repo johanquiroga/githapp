@@ -34,7 +34,7 @@ function RepoDetails({ visible, data, onDismiss, themedStyle }: RepoDetailsProps
               Branch:
               <Text category="c1">&nbsp;{data.default_branch}</Text>
             </Text>
-            <Hyperlink linkDefault>
+            <Hyperlink linkDefault linkStyle={themedStyle.url}>
               <Text category="label" style={themedStyle.item}>
                 URL:
                 <Text category="c1">&nbsp;{data.clone_url}</Text>
@@ -63,5 +63,9 @@ export default withStyles(RepoDetails, theme => ({
   },
   item: {
     marginVertical: 10,
+  },
+  url: {
+    color: theme['color-primary-500'],
+    textDecorationLine: 'underline',
   },
 }));
