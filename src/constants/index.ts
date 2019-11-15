@@ -1,6 +1,6 @@
 export const PREFIX = 'githapp';
 
-export const PER_PAGE = 5;
+export const PER_PAGE = 10;
 
 /**
  * @see https://github.com/shinnn/github-username-regex

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { unionBy } from 'lodash';
 
-import { Repo } from 'src/types';
+import { Repo } from '../types';
 import * as GithappService from '../services';
 
 import { RepoList as RepoListComponent } from '../components';
@@ -13,6 +14,7 @@ type Props = {
 };
 
 function RepoList({ username, onPress }: Props) {
+  const [searchTerm, setSearchTerm] = useState('');
   const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -20,17 +22,17 @@ function RepoList({ username, onPress }: Props) {
   const [loadMore, setLoadMore] = useState(true);
 
   const getRepos = useCallback(async () => {
-    const response = await GithappService.getUserRepos(username, { params: { page } });
+    const response = await GithappService.getUserRepos(username, searchTerm, { params: { page } });
 
     if (response.success && response.data) {
       if (page === 1) {
         setData(response.data.repos);
       } else {
-        setData(prevData => [...prevData, ...response.data.repos]);
+        setData(prevData => unionBy(prevData, response.data ? response.data.repos : [], 'id'));
       }
       setLoadMore(!(response.data.repos.length < PER_PAGE));
     }
-  }, [username, page]);
+  }, [username, searchTerm, page]);
 
   useEffect(() => {
     getRepos();
@@ -40,8 +42,9 @@ function RepoList({ username, onPress }: Props) {
     <RepoListComponent
       repos={data}
       onRefresh={async () => {
-        setPage(1);
         setRefreshing(true);
+        setPage(1);
+        setSearchTerm('');
         await getRepos();
         setRefreshing(false);
       }}
@@ -56,6 +59,10 @@ function RepoList({ username, onPress }: Props) {
       refreshing={refreshing}
       loadingMore={loadingMore}
       onPress={onPress}
+      onSearch={(text: string) => {
+        setPage(1);
+        setSearchTerm(text);
+      }}
     />
   );
 }
