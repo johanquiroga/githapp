@@ -95,14 +95,21 @@ export const getUser = async (id: string): Promise<ServiceResponse> => {
 
 export const getUserRepos = async (
   username: string,
+  searchTerm: string,
   config?: AxiosRequestConfig,
 ): Promise<ServiceResponse> => {
   try {
+    let q = `user:${username}`;
+
+    if (searchTerm) {
+      q = `${searchTerm}+${q}`;
+    }
+
     const response = await github.get(
-      `/users/${username}/repos`,
+      `/search/repositories?q=${q}`,
       merge({ params: { per_page: PER_PAGE } }, config),
     );
-    const repos = response.data;
+    const repos = response.data.items;
     return {
       success: true,
       data: {

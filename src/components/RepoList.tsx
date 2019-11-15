@@ -9,6 +9,7 @@ import {
 } from 'react-native-ui-kitten';
 
 import RepoListItem from './RepoListItem';
+import Searchbar from './Searchbar';
 
 import { Repo } from '../types';
 
@@ -19,6 +20,7 @@ type RepoListProps = {
   refreshing: boolean;
   loadingMore: boolean;
   onPress: (item: Repo) => void;
+  onSearch: (text: string) => void;
 } & ThemedComponentProps;
 
 const RepoList = ({
@@ -28,8 +30,11 @@ const RepoList = ({
   refreshing,
   loadingMore,
   onPress,
+  onSearch,
   themedStyle,
 }: RepoListProps) => {
+  const renderHeader = () => <Searchbar onSearch={onSearch} />;
+
   const renderItem = ({ item }) => (
     <RepoListItem
       repo={item}
@@ -41,7 +46,7 @@ const RepoList = ({
 
   const renderEmpty = () => (
     <Layout style={themedStyle.emptyContainer}>
-      <Text style={themedStyle.centerText}>You don't have created any users yet.</Text>
+      <Text style={themedStyle.centerText}>We couldn't find any repos.</Text>
     </Layout>
   );
 
@@ -67,6 +72,7 @@ const RepoList = ({
       onEndReached={onLoadMore}
       onEndReachedThreshold={0.5}
       initialNumToRender={5}
+      ListHeaderComponent={renderHeader}
       ListEmptyComponent={renderEmpty}
       ListFooterComponent={renderFooter}
     />
