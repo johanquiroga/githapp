@@ -17,7 +17,7 @@
     "color": "^3.1.2",
     "fecha": "^3.0.3",
     "formik": "^2.0.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-dotenv": "^0.2.0",
